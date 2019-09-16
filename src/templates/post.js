@@ -1,19 +1,26 @@
 import React, { Component } from "react"
 import { graphql } from "gatsby"
 import PropTypes from "prop-types"
-import Img from 'gatsby-image'
-import Layout from '../components/layout';
- 
+import Layout from "../components/layout"
+import Img from "gatsby-image"
+
 class PostTemplate extends Component {
   render() {
     const post = this.props.data.wordpressPost
+    const resolutions = this.props.data.wordpressPost.featured_media.localFile
+      .childImageSharp.resolutions
+    console.log(post)
 
     return (
-        <Layout>
-            <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
-            {/* <PostIcons node={post} css={{ marginBottom: rhythm(1 / 2) }} /> */}
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-        </Layout>
+      <Layout>
+        <h1 dangerouslySetInnerHTML={{ __html: post.title }} />
+        {resolutions && (
+          <div>
+            <Img resolutions={resolutions} />
+          </div>
+        )}
+        <div dangerouslySetInnerHTML={{ __html: post.content }} />
+      </Layout>
     )
   }
 }
@@ -26,10 +33,22 @@ PostTemplate.propTypes = {
 export default PostTemplate
 
 export const pageQuery = graphql`
-  query currentPostQuery($id: String!) {
+  query($id: String!) {
     wordpressPost(id: { eq: $id }) {
       title
       content
+      featured_media {
+        localFile {
+          childImageSharp {
+            resolutions(width: 300, height: 300) {
+              src
+              width
+              height
+              srcSet
+            }
+          }
+        }
+      }
     }
     site {
       siteMetadata {

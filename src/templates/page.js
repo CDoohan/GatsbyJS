@@ -1,10 +1,6 @@
 import React, { Component } from "react"
 import { graphql } from "gatsby"
-import Layout from '../components/layout';
-// import PostIcons from "../components/post-icons"
-// import Layout from "../layouts"
-
-// import { rhythm } from "../utils/typography"
+import Layout from "../components/layout"
 
 class PageTemplate extends Component {
   render() {
@@ -22,7 +18,7 @@ class PageTemplate extends Component {
 export default PageTemplate
 
 export const pageQuery = graphql`
-  query currentPageQuery($id: String!) {
+  query($id: String!) {
     wordpressPage(id: { eq: $id }) {
       title
       content
